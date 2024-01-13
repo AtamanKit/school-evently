@@ -29,11 +29,11 @@ type DropdownProps = {
 
 const Dropdown = ({ value, onChangeHandler }: DropdownProps) => {
     const [categories, setCategories] = useState<ICategory[]>([])
-    const [setNewCategory, setSetNewCategory] = useState("");
+    const [newCategory, setNewCategory] = useState("");
 
     const handleAddCategory = () => {
         createCategory({
-            categoryName: setNewCategory.trim()
+            categoryName: newCategory.trim()
         })        
         .then((category) => {
             setCategories((prevState) => [...prevState, category])
@@ -42,10 +42,12 @@ const Dropdown = ({ value, onChangeHandler }: DropdownProps) => {
 
     useEffect(() => {
         const getCategories = async () => {
-            const categories = await getAllCategories();
+            const categoryList = await getAllCategories();
 
-            categories && setCategories(categories)
+            categoryList && setCategories(categoryList as ICategory[])
         }
+
+        getCategories();
     }, [])
 
     return (
@@ -60,7 +62,7 @@ const Dropdown = ({ value, onChangeHandler }: DropdownProps) => {
                 </SelectItem>
             ))}
             <AlertDialog>
-                <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500 hover:bg-primary-50 focus:text-primary-500">Open</AlertDialogTrigger>
+                <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500 hover:bg-primary-50 focus:text-primary-500">Add new category</AlertDialogTrigger>
                 <AlertDialogContent className="bg-white">
                     <AlertDialogHeader>
                     <AlertDialogTitle>New Category</AlertDialogTitle>
